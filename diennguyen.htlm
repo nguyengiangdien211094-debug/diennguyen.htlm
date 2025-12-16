@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phiếu Kiểm Tra Trạm Biến Áp Hàng Tháng</title>
+    <style>
+        /* CSS cho giao diện */
+        body { font-family: 'Arial', sans-serif; margin: 0; padding: 20px; background-color: #f4f7f6; }
+        .container { max-width: 1100px; margin: auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #007bff; border-bottom: 3px solid #007bff; padding-bottom: 10px; margin-bottom: 20px; font-size: 1.8em; }
+        .document-title { text-align: center; margin-bottom: 15px; font-style: italic; color: #555; }
+        .header-meta { display: flex; justify-content: space-between; font-size: 0.85em; margin-bottom: 15px; }
+        .header-meta span { font-weight: bold; }
+        .info-inputs { display: flex; justify-content: space-between; margin-bottom: 25px; background-color: #eef4ff; padding: 15px; border-radius: 6px; }
+        .info-inputs div { flex-basis: 30%; }
+        .info-inputs label { font-weight: bold; display: block; margin-bottom: 5px; color: #333; }
+        .info-inputs input { width: 100%; padding: 8px; border: 1px solid #cce; border-radius: 4px; box-sizing: border-box; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.9em; }
+        th, td { border: 1px solid #ddd; padding: 8px 5px; text-align: left; vertical-align: top; }
+        th { background-color: #d6e9f8; color: #1e3a8a; font-weight: bold; text-align: center; }
+        .standard-col { width: 25%; font-size: 0.8em; }
+        .month-col { width: 4.5%; text-align: center; }
+        .result-radio { display: flex; flex-direction: column; align-items: flex-start; }
+        .result-radio input[type="radio"] { margin-right: 3px; }
+        .result-radio label { font-size: 0.75em; margin-right: 0; }
+        .remarks-input { width: 95%; padding: 3px; border: 1px solid #ccc; border-radius: 3px; font-size: 0.8em; }
+
+        .signature-block { display: flex; justify-content: space-around; text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px dashed #ccc; }
+        .signature-block > div { width: 30%; }
+        .signature-block .name-input { width: 80%; margin-top: 5px; text-align: center; border: none; border-bottom: 1px solid #555; padding: 5px 0; }
+        .signature-title { font-weight: bold; margin-bottom: 5px; font-size: 1.1em; color: #1e3a8a; }
+
+        .button-group { text-align: center; margin-top: 30px; }
+        .button-group button { background-color: #28a745; color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; font-weight: bold; transition: background-color 0.3s; }
+        .button-group button:hover { background-color: #218838; }
+        .disclaimer { margin-top: 15px; font-size: 0.9em; color: #c82333; text-align: center; border: 1px solid #f5c6cb; background-color: #f8d7da; padding: 10px; border-radius: 4px; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>PHIẾU KIỂM TRA TRẠM BIẾN ÁP HÀNG THÁNG</h2>
+    <div class="document-title">MONTHLY ELECTRICAL SUBSTATION CHECKLIST</div>
+
+    <div class="header-meta">
+        <div>Mã tài liệu: <span>TA-MNT-PC01-WI01-F02</span></div>
+        <div>Phiên bản và ngày hiệu lực: <span>01_09/08/2025</span></div>
+    </div>
+
+    <div class="info-inputs">
+        <div><label for="substation_num">Trạm biến áp số:</label> <input type="text" id="substation_num" placeholder="E.g., TBA-01"></div>
+        <div><label for="area">Khu vực:</label> <input type="text" id="area" placeholder="E.g., Khu Vực A"></div>
+        <div><label for="year">Năm kiểm tra:</label> <input type="number" id="year" value="2025" min="2020"></div>
+    </div>
+
+    <p style="font-weight: bold; margin-bottom: 10px;">Kết quả: "Đạt" đánh **OK** / "Không đạt" đánh **NG**</p>
+    
+    <form id="inspectionForm">
+    <table>
+        <thead>
+            <tr>
+                <th rowspan="2" style="width: 3%;">STT</th>
+                <th rowspan="2" style="width: 25%;">Nội dung kiểm tra / Items</th>
+                <th rowspan="2" class="standard-col">Tiêu chuẩn đánh giá / Standard</th>
+                <th colspan="12" style="text-align: center;">Tháng (T)</th>
+                <th rowspan="2" style="width: 10%;">Ghi chú / Remarks</th>
+            </tr>
+            <tr>
+                <th>T1</th><th>T2</th><th>T3</th><th>T4</th><th>T5</th><th>T6</th><th>T7</th><th>T8</th><th>T9</th><th>T10</th><th>T11</th><th>T12</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${generate_inspection_row(1, "Kiểm tra mức dầu máy biến áp", "1. Phao hiển thị màu trắng/ Mức dầu nằm trong giới hạn thước đo – OK<br>2. Phao hiển thị màu đỏ/ Mức dầu nằm ngoài giới hạn thước đo – NG", "oil_level")}
+            ${generate_inspection_row(2, "Có rò rỉ dầu không", "Không có rò rỉ dầu ở chân sứ, bích, ống dầu…", "oil_leak")}
+            ${generate_inspection_row(3, "Có âm thanh bất thường không", "Không có âm thanh lạ (âm thanh kích từ cao, chấn động, âm thanh cộng hưởng, tiếng bíp bíp lõi sắt, ...)", "abnormal_sound")}
+            ${generate_inspection_row(4, "Môi trường xung quanh MBA", "Không có vật cản, sạch sẽ, không nước đọng", "environment")}
+            ${generate_inspection_row(5, "Mùi hôi", "Có mùi hôi bất thường hay không", "smell")}
+            ${generate_inspection_row(6, "Kiểm tra ngoại quan (Siết chặt)", "Bộ phận siết chặt có bị đổi màu do quá nhiệt hay không", "external_tighten")}
+            ${generate_inspection_row(7, "Kiểm tra ngoại quan (Ống sứ)", "Ống sứ có bị nứt hoặc bị bẩn không", "external_porcelain")}
+            ${generate_inspection_row(8, "Kiểm tra ngoại quan (Phóng điện)", "Có vết phóng điện hay không", "external_discharge")}
+        </tbody>
+    </table>
+
+    <div class="signature-block">
+        <div>
+            <div class="signature-title">Kỹ thuật bảo trì</div>
+            <p style="margin-top: 10px;">Chữ ký: ......................</p>
+            Tên: <input type="text" name="tech_name" class="name-input" placeholder="Nhập tên Kỹ thuật">
+        </div>
+        <div>
+            <div class="signature-title">Kỹ sư bảo trì</div>
+            <p style="margin-top: 10px;">Chữ ký: ......................</p>
+            Tên: <input type="text" name="engineer_name" class="name-input" placeholder="Nhập tên Kỹ sư">
+        </div>
+        <div>
+            <div class="signature-title">Trưởng phòng bảo trì</div>
+            <p style="margin-top: 10px;">Chữ ký: ......................</p>
+            Tên: <input type="text" name="manager_name" class="name-input" placeholder="Nhập tên Trưởng phòng">
+        </div>
+    </div>
+    </form>
+
+    <div class="button-group">
+        <button onclick="exportDataAsJson()">Tạo và Tải về Tệp Dữ Liệu (JSON)</button>
+    </div>
+    <div class="disclaimer">
+        **Lưu ý quan trọng:** Chức năng này chỉ tạo và tải về file JSON. **Để xem và lưu trữ trên Firebase**, bạn cần có một hệ thống (backend/cloud function) để xử lý file JSON này và ghi vào cơ sở dữ liệu Firebase.
+    </div>
+</div>
+
+<script>
+    // Hàm tạo các ô kết quả kiểm tra cho 12 tháng
+    function generate_month_cells(itemId) {
+        let cells = '';
+        for (let i = 1; i <= 12; i++) {
+            cells += `
+                <td class="month-col">
+                    <div class="result-radio">
+                        <input type="radio" id="${itemId}_T${i}_OK" name="${itemId}_T${i}" value="OK"> <label for="${itemId}_T${i}_OK">OK</label>
+                        <input type="radio" id="${itemId}_T${i}_NG" name="${itemId}_T${i}" value="NG"> <label for="${itemId}_T${i}_NG">NG</label>
+                    </div>
+                </td>
+            `;
+        }
+        return cells;
+    }
+    
+    // Hàm tạo một dòng kiểm tra hoàn chỉnh
+    function generate_inspection_row(stt, item_vn, standard, itemId) {
+        return `
+            <tr data-item="${itemId}">
+                <td>${stt}</td>
+                <td>${item_vn}</td>
+                <td class="standard-col">${standard}</td>
+                ${generate_month_cells(itemId)}
+                <td><input type="text" class="remarks-input" name="remarks_${itemId}" placeholder="Ghi chú nếu NG"></td>
+            </tr>
+        `;
+    }
+
+    // Hàm thu thập dữ liệu và xuất ra file JSON
+    function exportDataAsJson() {
+        const form = document.getElementById('inspectionForm');
+        const formData = new FormData(form);
+        const data = {};
+        
+        // 1. Thu thập thông tin chung (Meta Data)
+        data.meta = {
+            substation_num: document.getElementById('substation_num').value,
+            area: document.getElementById('area').value,
+            year: document.getElementById('year').value,
+            document_number: "TA-MNT-PC01-WI01-F02",
+            version_date: "01_09/08/2025",
+            timestamp: new Date().toISOString()
+        };
+        
+        // 2. Thu thập kết quả kiểm tra
+        data.results = [];
+        const rows = document.querySelectorAll('#inspectionForm tbody tr');
+        rows.forEach(row => {
+            const itemId = row.getAttribute('data-item');
+            const itemResult = {
+                item_id: itemId,
+                monthly_results: {},
+                remarks: formData.get(`remarks_${itemId}`) || ""
+            };
+
+            for (let i = 1; i <= 12; i++) {
+                // Lấy giá trị radio button đã chọn cho mỗi tháng
+                const selectedRadio = document.querySelector(`input[name="${itemId}_T${i}"]:checked`);
+                itemResult.monthly_results[`T${i}`] = selectedRadio ? selectedRadio.value : "";
+            }
+            data.results.push(itemResult);
+        });
+
+        // 3. Thu thập chữ ký/tên
+        data.signatures = {
+            tech_name: document.querySelector('input[name="tech_name"]').value,
+            engineer_name: document.querySelector('input[name="engineer_name"]').value,
+            manager_name: document.querySelector('input[name="manager_name"]').value
+        };
+
+        // Chuyển đối tượng data sang chuỗi JSON
+        const jsonString = JSON.stringify(data, null, 2);
+        
+        // Tạo blob và tải về
+        const blob = new Blob([jsonString], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        
+        // Đặt tên file tải về
+        const sub_num = data.meta.substation_num.replace(/[^a-zA-Z0-9]/g, '_') || 'Unknown';
+        a.download = `Checklist_MBA_${sub_num}_${data.meta.year}_${new Date().getMonth() + 1}.json`;
+        
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        alert("Đã tạo và tải xuống tệp JSON chứa dữ liệu kiểm tra.");
+    }
+</script>
+
+</body>
+</html>
